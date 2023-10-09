@@ -51,6 +51,8 @@ import Daily_Work from "layouts/daily_work/Daily_Work";
 import ArrigmentTable from "layouts/arrigmenttable/ArrigmentTable";
 import WorkTables from "layouts/worktable/WorkTables";
 import CustumerTable from "layouts/custumertable/CustumerTable";
+import SubContracter from "layouts/subcontracter/SubContracter";
+import ProjectTable from "layouts/projecttable/ProjectTable";
 
 const routes = [
   {
@@ -76,6 +78,22 @@ const routes = [
     icon: <Icon fontSize="small">A</Icon>,
     route: "/ArrigmentTable",
     component: <ArrigmentTable />,
+  },
+  {
+    type: "collapse",
+    name: "Sub Contractor",
+    key: "",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/subcontractor",
+    component: <SubContracter />,
+  },
+  {
+    type: "collapse",
+    name: "Project Table",
+    key: "",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/projecttable",
+    component: <ProjectTable />,
   },
   {
     type: "collapse",
