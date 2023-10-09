@@ -13,8 +13,11 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
+import { useState } from "react";
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Slide, ToastContainer, Zoom, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -33,6 +36,62 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
 
 function Cover() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSignupSubmit = async (e) => {
+    e.preventDefault();
+
+    const user = {
+      first_name: firstName,
+      last_name: lastName,
+      username: username,
+      password: password,
+      email: email,
+    };
+
+    const response = await fetch(process.env.REACT_APP_API_URL + "/user/register/", {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response);
+    const json = await response.json();
+    console.log(json);
+    if (json.code === 400) {
+      toast.error("Error during registration, Please try again!", {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    if (json.code === 200) {
+      toast.success("Registered Successfully", {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      navigate("/authentication/sign-in");
+    }
+  };
+
   return (
     <CoverLayout image={bgImage}>
       <Card>
@@ -55,40 +114,60 @@ function Cover() {
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+          <MDBox component="form" role="form" onSubmit={handleSignupSubmit}>
             <MDBox mb={2}>
-              <MDInput type="text" label="Name" variant="standard" fullWidth />
+              <MDInput
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                type="text"
+                label="First Name"
+                variant="standard"
+                fullWidth
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
+              <MDInput
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                type="text"
+                label="Last Name"
+                variant="standard"
+                fullWidth
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" variant="standard" fullWidth />
+              <MDInput
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                label="Email"
+                variant="standard"
+                fullWidth
+              />
             </MDBox>
-            <MDBox display="flex" alignItems="center" ml={-1}>
-              <Checkbox />
-              <MDTypography
-                variant="button"
-                fontWeight="regular"
-                color="text"
-                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-              >
-                &nbsp;&nbsp;I agree the&nbsp;
-              </MDTypography>
-              <MDTypography
-                component="a"
-                href="#"
-                variant="button"
-                fontWeight="bold"
-                color="info"
-                textGradient
-              >
-                Terms and Conditions
-              </MDTypography>
+            <MDBox mb={2}>
+              <MDInput
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                type="text"
+                label="Username"
+                variant="standard"
+                fullWidth
+              />
+            </MDBox>
+            <MDBox mb={2}>
+              <MDInput
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                label="Password"
+                variant="standard"
+                fullWidth
+              />
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
+              <MDButton type="submit" variant="gradient" color="info" fullWidth>
+                register
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">

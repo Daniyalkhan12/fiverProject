@@ -16,7 +16,9 @@ Coded by www.creative-tim.com
 import { useState } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Slide, ToastContainer, Zoom, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -42,10 +44,62 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 function Basic() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
-
+  const logInUser = async (e) => {
+    e.preventDefault();
+    const login = {
+      username: username,
+      password: password,
+    };
+    console.log(process.env, login);
+    const response = await fetch(process.env.REACT_APP_API_URL + "/user/login/", {
+      method: "POST",
+      body: JSON.stringify(login),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response);
+    const json = await response.json();
+    console.log(json);
+    if (json.code == 400) {
+      toast.error("Username or Password wrong, Please try again!", {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    if (json.code == 200) {
+      const access = json.data.access;
+      localStorage.setItem("accessToken", access);
+      const refresh = json.data.refresh;
+      localStorage.setItem("refreshToken", refresh);
+      const username = json.data.username;
+      localStorage.setItem("username", username);
+      console.log(localStorage);
+      toast.success("Logged In Successfully", {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      window.location.href = "/dashboard";
+    }
+  };
   return (
     <BasicLayout image={bgImage}>
       <Card>
@@ -82,12 +136,24 @@ function Basic() {
           </Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+          <MDBox component="form" role="form" onSubmit={logInUser}>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
+              <MDInput
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                type="text"
+                label="Username"
+                fullWidth
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                label="Password"
+                fullWidth
+              />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -102,7 +168,7 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton type="submit" variant="gradient" color="info" fullWidth>
                 sign in
               </MDButton>
             </MDBox>
