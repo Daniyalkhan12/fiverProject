@@ -51,8 +51,9 @@ import Daily_Work from "layouts/daily_work/Daily_Work";
 import ArrigmentTable from "layouts/arrigmenttable/ArrigmentTable";
 import WorkTables from "layouts/worktable/WorkTables";
 import CustumerTable from "layouts/custumertable/CustumerTable";
-import SubContracter from "layouts/subcontracter/SubContracter";
 import ProjectTable from "layouts/projecttable/ProjectTable";
+import TableWork from "layouts/tablework/TableWork";
+import SubConTable from "layouts/Sub-ConTable/SubConTable";
 
 const routes = [
   {
@@ -79,13 +80,29 @@ const routes = [
     route: "/ArrigmentTable",
     component: <ArrigmentTable />,
   },
+  // {
+  //   type: "collapse",
+  //   name: "Sub Contractor",
+  //   key: "",
+  //   icon: <Icon fontSize="small">table_view</Icon>,
+  //   route: "/sub-contractor",
+  //   component: <SubContracter />,
+  // },
   {
     type: "collapse",
     name: "Sub Contractor",
     key: "",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/subcontractor",
-    component: <SubContracter />,
+    component: <SubConTable />,
+  },
+  {
+    type: "collapse",
+    name: "Work Table",
+    key: "",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/tablework",
+    component: <TableWork />,
   },
   {
     type: "collapse",
@@ -95,14 +112,14 @@ const routes = [
     route: "/projecttable",
     component: <ProjectTable />,
   },
-  {
-    type: "collapse",
-    name: "Work Table",
-    key: "",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/work_table",
-    component: <WorkTables />,
-  },
+  // {
+  //   type: "hide",
+  //   name: "Work Table",
+  //   key: "",
+  //   icon: <Icon fontSize="small">table_view</Icon>,
+  //   route: "/work_table",
+  //   component: <WorkTables />,
+  // },
   {
     type: "collapse",
     name: "Customer Table",

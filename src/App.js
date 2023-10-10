@@ -52,6 +52,8 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+import SubContracter from "layouts/subcontracter/SubContracter";
+import WorkTables from "layouts/worktable/WorkTables";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -192,6 +194,8 @@ export default function App() {
       <Routes>
         {getRoutes(routes)}
         <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="/sub-contractor" element={<SubContracter />} />
+        <Route path="/work_table" element={<WorkTables />} />
       </Routes>
     </ThemeProvider>
   );
