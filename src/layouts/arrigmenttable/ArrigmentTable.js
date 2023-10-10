@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from "@mui/material/Card";
 import {  FormControl,
     FormLabel,
@@ -16,10 +16,25 @@ import {  FormControl,
     Button, Container, List, ListItem, Grid, Typography, InputLabel, Select, MenuItem, } from '@mui/material';
 import MDBox from 'components/MDBox';
 import { Label } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { Slide, ToastContainer, Zoom, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const ArrigmentTable = () => {
     const [box1Value, setBox1Value] = useState('');
   const [box2Value, setBox2Value] = useState('');
+  const [projects, setProjects] = useState([])
+  const [subContractors, setSubContractors] = useState([])    
+  const [formData, setFormData] = useState({
+      sub_id: '',
+      project_id: '',
+      start_date: '',
+      end_date: '',
+      price: '',
+      payments: [],
+      superintendent_id: '',
+    });
 
+    const navigate = useNavigate();
   const handleBox1Change = (event) => {
     setBox1Value(event.target.value);
   };
@@ -28,13 +43,13 @@ const ArrigmentTable = () => {
     setBox2Value(event.target.value);
   };
   const [data, setData] = useState([
-    { id: 1, col1: '', col2: '', col3: '' },
+    { id: 1, check_no: '', date: '', amount: '' },
   ]);
   const [nextId, setNextId] = useState(2);
 
   const handleAddRow = () => {
     if (data.length < 5) {
-      setData([...data, { id: nextId, col1: '', col2: '', col3: '' }]);
+      setData([...data, { id: nextId, check_no: '', date: '', amount: '' }]);
       setNextId(nextId + 1);
     }
     console.log('>>',data)
@@ -53,6 +68,13 @@ const ArrigmentTable = () => {
     setSelectedFile(file);
   };
 
+  const handleFormInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
   const handleUpload = () => {
     // You can add your file upload logic here using the selectedFile.
     if (selectedFile) {
@@ -60,7 +82,111 @@ const ArrigmentTable = () => {
       // Add your file upload logic here, e.g., using FormData and an API.
     }
   };
+    
+  const onChangeDate = (e) => {
+    const {name, value} = e.target
+    
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Access the form data in the formData state object
+    formData['payments'] = data
+    console.log(formData);
+
+    // You can send this data to your server or perform any other actions here
+  const response = await fetch(process.env.REACT_APP_API_URL + "/construction/agreement_add/", {
+    method: "POST",
+    body: JSON.stringify(formData),
+    headers:{
+      'Content-Type': 'application/json'
+    }
+  });
+  console.log(response);
+  const json = await response.json();
+  console.log(json);
+  if (json.code == 400) {
+    toast.error("Error, Please try again!", {
+      position: "top-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  }
+  if (json.code == 200) {
+    const access = json.data.access;
+    localStorage.setItem("accessToken", access);
+    const refresh = json.data.refresh;
+    localStorage.setItem("refreshToken", refresh);
+    const username = json.data.username;
+    localStorage.setItem("username", username);
+    console.log(localStorage);
+    toast.success("Agreement added Successfully", {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    // navigate('/dashboard')
+    };
+  }
+  
+  const fetchProjectsData = async () => {
+    const response = await fetch(''+process.env.REACT_APP_API_URL+'/construction/project_list/?per_page=5000&page_no=1',{
+      // headers: {
+      //   'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+      // }
+    })
+    if (!response.ok){
+      console.error("Error Fetching Projects")
+      return;
+    }
+    const responseData = await response.json()
+    if(responseData.code != 200){
+      console.error("Error getting Projects")
+      return;
+    }
+    // Store the product in the state
+    setProjects(responseData.data.dataset);
+  }
+  const fetchSubContractorsData = async () => {
+    const response = await fetch(''+process.env.REACT_APP_API_URL+'/construction/subcontractor_list/?per_page=5000&page_no=1',{
+    // headers: {
+    //   'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+    // }
+    })
+    if (!response.ok){
+      console.error("Error Fetching subcontractors")
+      return;
+    }
+    const responseData = await response.json()
+    if(responseData.code != 200){
+      console.error("Error getting subcontractors")
+      return;
+    }
+    // Store the product in the state
+    setSubContractors(responseData.data.dataset);
+  }
+  useEffect(() => {
+    fetchProjectsData();
+    fetchSubContractorsData();
+
+  }, []);
   return (
+    <form onSubmit={handleSubmit}>
+
     <DashboardLayout>
       <DashboardNavbar />
         <Card >
@@ -84,24 +210,22 @@ const ArrigmentTable = () => {
             <Typography variant="body1">Sub Name:</Typography>
           </Grid>
           <Grid item xs={10} md={4} lg={4} xl={4}>
-          <FormControl variant="outlined" fullWidth>
+        <FormControl variant="outlined" fullWidth>
+          <InputLabel htmlFor="project">Sub Contractor</InputLabel>
           <Select
-          sx={{height:'3rem'}}
-          value={box1Value}
-          onChange={handleBox1Change}
-          inputProps={{
-            name: 'box1',
-            id: 'box1',
-          }}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="option1">Option 1</MenuItem>
-          <MenuItem value="option2">Option 2</MenuItem>
-          <MenuItem value="option3">Option 3</MenuItem>
-        </Select>
-          
+            id="sub_id"
+            label="sub_id"
+            sx={{height:'2.7rem'}}
+            name="sub_id"
+            value={formData.sub_id}
+            onChange={handleFormInputChange}
+          >
+            {subContractors.map((subContractor) => (
+              <MenuItem key={subContractor.id} value={subContractor.id}>
+                {subContractor.id} - {subContractor.full_name}
+              </MenuItem>
+            ))}
+          </Select>
         </FormControl>
           </Grid>
         </Grid>
@@ -112,24 +236,23 @@ const ArrigmentTable = () => {
             <Typography variant="body1">Project:</Typography>
           </Grid>
           <Grid item xs={10} md={4} lg={4} xl={4}>
-          <FormControl fullWidth>
-        <Select
-        sx={{height:'3rem'}}
-          value={box2Value}
-          onChange={handleBox2Change}
-          inputProps={{
-            name: 'box2',
-            id: 'box2',
-          }}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="option1">Option 1</MenuItem>
-          <MenuItem value="option2">Option 2</MenuItem>
-          <MenuItem value="option3">Option 3</MenuItem>
-        </Select>
-      </FormControl>
+        <FormControl variant="outlined" fullWidth>
+          <InputLabel htmlFor="project">Project</InputLabel>
+          <Select
+            id="project"
+            label="Project"
+            sx={{height:'2.7rem'}}
+            name="project_id"
+            value={formData.project_id}
+            onChange={handleFormInputChange}
+          >
+            {projects.map((project) => (
+              <MenuItem key={project.id} value={project.id}>
+                {project.id} - {project.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
           </Grid>
         </Grid>
       </ListItem>
@@ -140,10 +263,14 @@ const ArrigmentTable = () => {
           </Grid>
           <Grid item xs={10} md={4} lg={4} xl={4}>
           <FormControl fullWidth>
-         <Input
-           id="date"
-           type="date"
-         />
+         
+          <Input
+            id="date"
+            type="date"
+            name="start_date"
+            value={formData.start_date}
+            onChange={onChangeDate}
+          />
        </FormControl>
           </Grid>
         </Grid>
@@ -156,10 +283,14 @@ const ArrigmentTable = () => {
           <Grid item xs={10} md={4} lg={4} xl={4}>
           <FormControl fullWidth>
          
-         <Input
-           id="date"
-           type="date"
-         />
+         
+          <Input
+            id="date"
+            type="date"
+            name="end_date"
+            value={formData.end_date}
+            onChange={onChangeDate}
+          />
        </FormControl>
           </Grid>
         </Grid>
@@ -172,6 +303,9 @@ const ArrigmentTable = () => {
           </Grid>
           <Grid item xs={10} md={4} lg={4} xl={4}>
           <TextField variant="outlined" fullWidth 
+          name="price"
+          value={formData.price}
+          onChange={handleFormInputChange}
           inputProps={{
             inputMode: 'numeric',
             pattern: '[0-9]*',
@@ -196,25 +330,25 @@ const ArrigmentTable = () => {
               <TableRow key={row.id}>
                 <TableCell>
                   <TextField
-                    value={row.col1}
+                    value={row.check_no}
                     onChange={(e) =>
-                      handleInputChange(row.id, 'col1', e.target.value)
+                      handleInputChange(row.id, 'check_no', e.target.value)
                     }
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
-                    value={row.col2}
+                    value={row.date}
                     onChange={(e) =>
-                      handleInputChange(row.id, 'col2', e.target.value)
+                      handleInputChange(row.id, 'date', e.target.value)
                     }
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
-                    value={row.col3}
+                    value={row.amount}
                     onChange={(e) =>
-                      handleInputChange(row.id, 'col3', e.target.value)
+                      handleInputChange(row.id, 'amount', e.target.value)
                     }
                   />
                 </TableCell>
@@ -263,10 +397,11 @@ const ArrigmentTable = () => {
       )}
     </div>
     <MDBox sx={{marginBottom:'1rem',display:'flex',justifyContent: 'flex-end',marginRight:'1rem'}}>
-        <Button variant="contained" sx={{color:'white !important'}}>Submit</Button>
+        <Button type="submit" variant="contained" sx={{color:'white !important'}}>Submit</Button>
       </MDBox>
       </Card>
     </DashboardLayout>
+    </form>
   )
 }
 
