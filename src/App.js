@@ -54,6 +54,9 @@ import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 import SubContracter from "layouts/subcontracter/SubContracter";
 import WorkTables from "layouts/worktable/WorkTables";
+import CustumerTable from "layouts/custumertable/CustumerTable";
+import ProjectList from "layouts/projecttablelist/ProjectList";
+import ProjectTable from "layouts/projecttable/ProjectTable";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -196,6 +199,8 @@ export default function App() {
         <Route path="*" element={<Navigate to="/dashboard" />} />
         <Route path="/sub-contractor" element={<SubContracter />} />
         <Route path="/work_table" element={<WorkTables />} />
+        <Route path="/tableCustomer" element={<CustumerTable />} />
+        <Route path="/tableproject" element={<ProjectTable />} />
       </Routes>
     </ThemeProvider>
   );

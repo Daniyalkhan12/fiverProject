@@ -49,9 +49,9 @@ import SignUp from "layouts/authentication/sign-up";
 import Icon from "@mui/material/Icon";
 import Daily_Work from "layouts/daily_work/Daily_Work";
 import ArrigmentTable from "layouts/arrigmenttable/ArrigmentTable";
-import WorkTables from "layouts/worktable/WorkTables";
-import CustumerTable from "layouts/custumertable/CustumerTable";
-import ProjectTable from "layouts/projecttable/ProjectTable";
+
+import Customerlist from "layouts/customertablelist/Customerlist";
+import ProjectList from "layouts/projecttablelist/ProjectList";
 import TableWork from "layouts/tablework/TableWork";
 import SubConTable from "layouts/Sub-ConTable/SubConTable";
 
@@ -110,7 +110,7 @@ const routes = [
     key: "",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/projecttable",
-    component: <ProjectTable />,
+    component: <ProjectList />,
   },
   // {
   //   type: "hide",
@@ -126,7 +126,7 @@ const routes = [
     key: "",
     icon: <Icon fontSize="small">C</Icon>,
     route: "/Customer_table",
-    component: <CustumerTable />,
+    component: <Customerlist />,
   },
   {
     type: "collapse",
