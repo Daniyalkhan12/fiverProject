@@ -57,6 +57,8 @@ import WorkTables from "layouts/worktable/WorkTables";
 import CustumerTable from "layouts/custumertable/CustumerTable";
 import ProjectList from "layouts/projecttablelist/ProjectList";
 import ProjectTable from "layouts/projecttable/ProjectTable";
+import ArrigmentTable from "layouts/arrigmenttable/ArrigmentTable";
+import Daily_Work from "layouts/daily_work/Daily_Work";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -201,6 +203,8 @@ export default function App() {
         <Route path="/work_table" element={<WorkTables />} />
         <Route path="/tableCustomer" element={<CustumerTable />} />
         <Route path="/tableproject" element={<ProjectTable />} />
+        <Route path="/ArrigmentTable" element={<ArrigmentTable />} />
+        <Route path="/daily_work" element={<Daily_Work />} />
       </Routes>
     </ThemeProvider>
   );

@@ -26,21 +26,34 @@ import Footer from "examples/Footer";
 import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
 import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
-
+import Card from "@mui/material/Card";
 // Data
 import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
 import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
-
+import { DataGrid } from "@mui/x-data-grid";
 // Dashboard components
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
-
+/* eslint-disable prettier/prettier */
 function Dashboard() {
   const { sales, tasks } = reportsLineChartData;
-
+  const columns = [
+    { field: "Date:", headerName: "Date:", width: 150 },
+    { field: "Report", headerName: "Report", width: 450 },
+    { field: "link", headerName: "Link", width: 450 },
+  ];
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <Card>
+      <DataGrid
+          rows=""
+          columns={columns}
+          pageSize={5} // Number of rows per page
+          checkboxSelection
+          disableSelectionOnClick // Disables row selection on row click
+        />
+      </Card>
       <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
@@ -155,7 +168,6 @@ function Dashboard() {
           </Grid>
         </MDBox>
       </MDBox>
-      <Footer />
     </DashboardLayout>
   );
 }

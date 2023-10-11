@@ -54,6 +54,8 @@ import Customerlist from "layouts/customertablelist/Customerlist";
 import ProjectList from "layouts/projecttablelist/ProjectList";
 import TableWork from "layouts/tablework/TableWork";
 import SubConTable from "layouts/Sub-ConTable/SubConTable";
+import ArrignmentList from "layouts/arrigmentlist/ArrignmentList";
+import WorkList from "layouts/worklist/WorkList";
 
 const routes = [
   {
@@ -69,16 +71,16 @@ const routes = [
     name: "Daily Work",
     key: "",
     icon: <Icon fontSize="small">Daily Work</Icon>,
-    route: "/daily_work",
-    component: <Daily_Work />,
+    route: "/daily_list",
+    component: <WorkList />,
   },
   {
     type: "collapse",
     name: "Agreement Table",
     key: "",
     icon: <Icon fontSize="small">A</Icon>,
-    route: "/ArrigmentTable",
-    component: <ArrigmentTable />,
+    route: "/ArrigmentList",
+    component: <ArrignmentList />,
   },
   // {
   //   type: "collapse",
@@ -128,14 +130,14 @@ const routes = [
     route: "/Customer_table",
     component: <Customerlist />,
   },
-  {
-    type: "collapse",
-    name: "Tables",
-    key: "tables",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
-    component: <Tables />,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Tables",
+  //   key: "tables",
+  //   icon: <Icon fontSize="small">table_view</Icon>,
+  //   route: "/tables",
+  //   component: <Tables />,
+  // },
   {
     type: "collapse",
     name: "Billing",
@@ -144,22 +146,22 @@ const routes = [
     route: "/billing",
     component: <Billing />,
   },
-  {
-    type: "collapse",
-    name: "RTL",
-    key: "rtl",
-    icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
-    route: "/rtl",
-    component: <RTL />,
-  },
-  {
-    type: "collapse",
-    name: "Notifications",
-    key: "notifications",
-    icon: <Icon fontSize="small">notifications</Icon>,
-    route: "/notifications",
-    component: <Notifications />,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "RTL",
+  //   key: "rtl",
+  //   icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
+  //   route: "/rtl",
+  //   component: <RTL />,
+  // },
+  // {
+  //   type: "collapse",
+  //   name: "Notifications",
+  //   key: "notifications",
+  //   icon: <Icon fontSize="small">notifications</Icon>,
+  //   route: "/notifications",
+  //   component: <Notifications />,
+  // },
   {
     type: "collapse",
     name: "Profile",
