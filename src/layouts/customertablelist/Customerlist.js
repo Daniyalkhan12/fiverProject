@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout'
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar'
@@ -16,13 +16,37 @@ const columns = [
     { field: 'telephone_two', headerName: 'Tel 2', width: 150 },
     { field: 'email', headerName: 'Email', width: 200 },
   ];
-  const rows = [
-    { id: 1, full_name: 'John Doe', company_name: 'ABC Inc.', address: '123 Main St', telephone_one: '555-1234', telephone_two: '555-5678', email: 'john@example.com' },
-    { id: 2, full_name: 'Jane Smith', company_name: 'XYZ Corp.', address: '456 Elm St', telephone_one: '555-9876', telephone_two: '555-5432', email: 'jane@example.com' },
-    { id: 3, full_name: 'Bob Johnson', company_name: '123 Company', address: '789 Oak St', telephone_one: '555-1111', telephone_two: '555-2222', email: 'bob@example.com' },
-    // Add more rows as needed
-  ];
+  // const rows = [
+  //   { id: 1, full_name: 'John Doe', company_name: 'ABC Inc.', address: '123 Main St', telephone_one: '555-1234', telephone_two: '555-5678', email: 'john@example.com' },
+  //   { id: 2, full_name: 'Jane Smith', company_name: 'XYZ Corp.', address: '456 Elm St', telephone_one: '555-9876', telephone_two: '555-5432', email: 'jane@example.com' },
+  //   { id: 3, full_name: 'Bob Johnson', company_name: '123 Company', address: '789 Oak St', telephone_one: '555-1111', telephone_two: '555-2222', email: 'bob@example.com' },
+  //   // Add more rows as needed
+  // ];
+
+
 const Customerlist = () => {
+  const [rows, setRows] = useState([])
+  const fetchCustomerData = async () => {
+    const response = await fetch(''+process.env.REACT_APP_API_URL+'/construction/customer_list/?per_page=5000&page_no=1',{
+    // headers: {
+    //   'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+    // }
+    })
+    if (!response.ok){
+      console.error("Error Fetching customers")
+      return;
+    }
+    const responseData = await response.json()
+    if(responseData.code != 200){
+      console.error("Error getting customers")
+      return;
+    }
+    // Store the product in the state
+    setRows(responseData.data.dataset);
+  }
+  useEffect(() => {
+    fetchCustomerData();
+  }, []);
   return (
     <DashboardLayout>
         <DashboardNavbar/>

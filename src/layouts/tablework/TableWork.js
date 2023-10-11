@@ -40,11 +40,34 @@ const TableWork = () => {
           },
       ];
       
-      const rows = [
-        { id: 1, reference: 'xxxxx', full_name: 'Jon', telephone: 352222,address:'xxxxx',skills:'xxxxx',dl_image_front:'xxxx',dl_image_back:'xxxxx' },
-      ];
+      // const rows = [
+      //   { id: 1, reference: 'xxxxx', full_name: 'Jon', telephone: 352222,address:'xxxxx',skills:'xxxxx',dl_image_front:'xxxx',dl_image_back:'xxxxx' },
+      // ];
       
     
+      const [rows, setRows] = useState([])
+      const fetchWorkerData = async () => {
+        const response = await fetch(''+process.env.REACT_APP_API_URL+'/construction/worker_list/?per_page=5000&page_no=1',{
+        // headers: {
+        //   'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+        // }
+        })
+        if (!response.ok){
+          console.error("Error Fetching workers")
+          return;
+        }
+        const responseData = await response.json()
+        if(responseData.code != 200){
+          console.error("Error getting workers")
+          return;
+        }
+        console.log(responseData.data.dataset)
+        // Store the product in the state
+        setRows(responseData.data.dataset);
+      }
+    useEffect(() => {
+      fetchWorkerData();
+    }, []);
   return (
    <DashboardLayout>
     <DashboardNavbar/>
