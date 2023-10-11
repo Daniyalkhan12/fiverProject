@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.2.0
@@ -122,7 +123,7 @@ export default function App() {
         return getRoutes(route.collapse);
       }
 
-      if (route.route) {
+      if (route.route) { 
         return <Route exact path={route.route} element={route.component} key={route.key} />;
       }
 
@@ -196,9 +197,10 @@ export default function App() {
         </>
       )}
       {layout === "vr" && <Configurator />}
+      {console.log(localStorage)}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="*" element={localStorage.getItem("accessToken") ? <Navigate to="/dashboard" />: <Navigate to="/authentication/sign-in"/>} />
         <Route path="/sub-contractor" element={<SubContracter />} />
         <Route path="/work_table" element={<WorkTables />} />
         <Route path="/tableCustomer" element={<CustumerTable />} />

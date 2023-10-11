@@ -139,7 +139,7 @@ const ArrigmentTable = () => {
       progress: undefined,
       theme: "colored",
     });
-    // navigate('/dashboard')
+    navigate('/ArrigmentList')
     };
   }
   
@@ -191,7 +191,7 @@ const ArrigmentTable = () => {
       <DashboardNavbar />
         <Card >
             <MDBox sx={{backgroundColor:'#1A73E8',borderRadius:'15px 15px 0 0'}}>
-            <Typography variant='h2' sx={{textAlign:'center',marginTop:'1rem',marginBottom:'1rem', color:'white !important'}}>Sub-Conteractor Agreement Table</Typography>
+            <Typography variant='h2' sx={{textAlign:'center',marginTop:'1rem',marginBottom:'1rem', color:'white !important'}}>Sub-Contractor Agreement Table</Typography>
             </MDBox>
             <List>
       {/* <ListItem sx={{marginBottom:'1rem',marginTop:'1rem',marginLeft:'1rem'}}>

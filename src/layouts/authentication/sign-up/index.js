@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.2.0
@@ -94,7 +95,7 @@ function Cover() {
 
   return (
     <CoverLayout image={bgImage}>
-      <Card>
+      <Card sx={{backgroundColor: 'rgb(166, 208, 235)'}}>
         <MDBox
           variant="gradient"
           bgColor="info"

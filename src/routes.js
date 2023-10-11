@@ -170,6 +170,14 @@ const routes = [
     route: "/profile",
     component: <Profile />,
   },
+  // {
+  //   type: "collapse",
+  //   name: "Logout",
+  //   key: "logout",
+  //   icon: <Icon fontSize="small">person</Icon>,
+  //   route: "/profile",
+  //   component: <Profile />,
+  // },
   {
     type: "collapse",
     name: "Sign In",

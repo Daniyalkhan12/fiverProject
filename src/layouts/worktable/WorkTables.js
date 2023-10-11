@@ -101,7 +101,7 @@ const WorkTables = () => {
       progress: undefined,
       theme: "colored",
     });
-    navigate('/dashboard')
+    navigate('/tablework')
     };
   }
   

@@ -77,7 +77,7 @@ const SubContracter = () => {
           progress: undefined,
           theme: "colored",
         });
-        navigate('/dashboard')
+        navigate('/subcontractor')
         };
       }
   return (

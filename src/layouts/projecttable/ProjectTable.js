@@ -86,7 +86,7 @@ const ProjectTable = () => {
           progress: undefined,
           theme: "colored",
         });
-        navigate('/dashboard')
+        navigate('/projecttable')
         };
       }
       

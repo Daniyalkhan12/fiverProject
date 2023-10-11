@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.2.0
@@ -101,8 +102,8 @@ function Basic() {
     }
   };
   return (
-    <BasicLayout image={bgImage}>
-      <Card>
+    <BasicLayout image={bgImage} >
+      <Card sx={{ marginTop: "4rem" }}>
         <MDBox
           variant="gradient"
           bgColor="info"

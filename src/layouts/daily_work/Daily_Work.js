@@ -8,6 +8,9 @@ import MDBox from 'components/MDBox';
 import { useNavigate } from 'react-router-dom';
 import { Slide, ToastContainer, Zoom, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Box from '@mui/material/Box';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Chip from '@mui/material/Chip';
 
 const Daily_Work = () => {
   // const projects = ['Project A', 'Project B', 'Project C'];
@@ -22,16 +25,16 @@ const Daily_Work = () => {
     date: '',
     id: '',
     company_name: '',
-    workers_ids: '',
+    workers_ids: [],
     invoice_number: ''
   });
   
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    let { name, value } = e.target;
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
   };
   
   const handleImageChange = (e) => {
@@ -70,6 +73,11 @@ const Daily_Work = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Access the form data in the formData state object
+    formData.workers_ids = formData.workers_ids.map((worker) => {
+      // Split the "id-name" string into an array
+      const [id, name] = worker.split('-');
+      return id; // Keep only the ID
+    });
     console.log(formData);
     // You can send this data to your server or perform any other actions here
     let formDataObject = new FormData();
@@ -118,7 +126,7 @@ const Daily_Work = () => {
       progress: undefined,
       theme: "colored",
     });
-    navigate('/dashboard')
+    navigate('/daily_list')
     };
   }
   
@@ -217,24 +225,35 @@ useEffect(() => {
     <Grid sx={6} >
     <List>
       <Typography variant='h2' sx={{marginLeft:'1rem'}}>Material:</Typography>
-    <ListItem sx={{marginBottom:'1rem',marginTop:'1rem',marginLeft:'1rem'}}>
+    <ListItem sx={{marginBottom:'1rem',marginTop:'1rem',marginLeft:'2rem'}}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={2} lg={2} xl={2}>
-            <Typography variant="body1">Name of worker :</Typography>
+            <Typography variant="body1">Select Workers :</Typography>
           </Grid>
           <Grid item xs={10} md={4} lg={4} xl={4}>
           <FormControl variant="outlined" fullWidth>
           <InputLabel htmlFor="project">Workers</InputLabel>
-          <Select
-            id="workers_ids"
-            label="Workers"
-            sx={{height:'2.7rem'}}
-            name="workers_ids"
-            value={formData.workers_ids}
-            onChange={handleInputChange}
-          >
+
+            <Select
+          labelId="demo-multiple-chip-label"
+          id="workers_ids"
+          name="workers_ids"
+          multiple
+          value={formData.workers_ids}
+          onChange={handleInputChange}
+          sx={{height: '2.5rem'}}
+          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+          renderValue={(selected) => (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value.split('-')[1]} />
+              ))}
+            </Box>
+          )}
+          // MenuProps={MenuProps}
+        >
             {workers.map((worker) => (
-              <MenuItem key={worker.id} value={worker.id}>
+              <MenuItem key={worker.id} value={`${worker.id}-${worker.full_name}`}>
                 {worker.full_name}
               </MenuItem>
             ))}

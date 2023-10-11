@@ -9,13 +9,13 @@ import {Button, FormControl, Input, Container, List, ListItem, Grid, Typography,
 import { Link } from 'react-router-dom';
 const ProjectList = () => {
     const columns = [
-        { field: 'col_id', headerName: 'ID', width: 100 },
+        { field: 'id', headerName: 'ID', width: 100 },
         { field: 'customer', headerName: 'Customer ID', width: 150 },
         { field: 'name', headerName: 'Name', width: 200 },
         { field: 'address', headerName: 'Address', width: 300 },
         { field: 'scope_of_works', headerName: 'Scope of Work', width: 200 },
         { field: 'attachContract', headerName: 'Attach Contract', width: 200 },
-        { field: 'id', headerName: 'Superintendent ID', width: 150 },
+        { field: 'superintendent', headerName: 'Superintendent ID', width: 150 },
       ];
       // const rows = [
       //   { id: 1, customer_id: 1, name: 'Project 1', address: '123 Main St', scope_of_works: 'Scope 1', attachContract: 'Contract 1', superintendent_id: 1 },
