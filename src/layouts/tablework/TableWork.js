@@ -7,7 +7,22 @@ import MDBox from 'components/MDBox';
 import Card from "@mui/material/Card";
 import {Button, FormControl, Input, Container, List, ListItem, Grid, Typography, InputLabel, Select, MenuItem, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 const TableWork = () => {
+  const handleButtonClick = (row, field) => {
+    if(field == "frontImage")
+      setSelectedImage(row.dl_image_front); // Set the image URL for the selected row
+    else
+      setSelectedImage(row.dl_image_back); // Set the image URL for the selected row
+
+    setOpenDialog(true); // Open the dialog
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false); // Close the dialog
+  };
     const columns = [
         { field: 'id', headerName: 'ID',width:20,width: 120 },
         { field: 'reference', headerName: 'Reference',width:120  },
@@ -38,6 +53,20 @@ const TableWork = () => {
             headerName: 'DL Image Back',
             width: 160 
           },
+          {
+            field: 'frontImage',
+            headerName: 'DL Image Front',
+            width: 150,
+            renderCell: (params) => (
+              <Button onClick={() => handleButtonClick(params.row)}>View Image</Button>
+            ),},
+            {
+              field: 'backImage',
+              headerName: 'DL Image Back',
+              width: 150,
+              renderCell: (params) => (
+                <Button onClick={() => handleButtonClick(params.row, params.field)}>View Image</Button>
+              ),},
       ];
       
       // const rows = [
@@ -46,6 +75,14 @@ const TableWork = () => {
       
     
       const [rows, setRows] = useState([])
+      const [openDialog, setOpenDialog] = useState(false);
+      const [selectedImage, setSelectedImage] = useState('');
+      const columnVisibilityModel = React.useMemo(() => {
+       return{
+        dl_image_front: false,
+        dl_image_back: false,
+       }
+      }, []);
       const fetchWorkerData = async () => {
         const response = await fetch(''+process.env.REACT_APP_API_URL+'/construction/worker_list/?per_page=5000&page_no=1',{
         // headers: {
@@ -84,6 +121,7 @@ const TableWork = () => {
       <DataGrid
         rows={rows}
         columns={columns}
+        columnVisibilityModel={columnVisibilityModel}
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 5 },
@@ -94,6 +132,17 @@ const TableWork = () => {
     </div>
     </Card>
     
+    <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Image</DialogTitle>
+        <DialogContent>
+          <img style={{width: '30rem', height: '20rem'}} src={""+process.env.REACT_APP_API_URL+"/" + selectedImage} alt="Receipt" />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
    </DashboardLayout>
   )
 }

@@ -19,32 +19,49 @@ const WorkList = () => {
       setSelectedImage(row.receipt_image); // Set the image URL for the selected row
       setOpenDialog(true); // Open the dialog
     };
+    const handleProjectImages = (row) => {
+      console.log(row.images.length)
+      setImages(row.images); // Set the image URL for the selected row
+      setImagesDialog(true); // Open the dialog
+    };
     const columns = [
         { field: 'date', headerName: 'Date:', width: 150 },
-        { field: 'project', headerName: 'Project', width: 150 },
+        { field: 'project_name', headerName: 'Project', width: 150 },
         { field: 'workers', headerName: 'Name of workers', width: 150 },
         { field: 'company_name', headerName: 'Company Name', width: 200 },
         { field: 'invoice_number', headerName: 'Invoice Number', width: 150 },
         { field: 'receipt_image', headerName: 'Receipt Image', width: 150, hide:true },
+        { field: 'images', headerName: 'Project Image', width: 150, hide:true },
         {
           field: 'actions',
           headerName: 'Receipt Image',
           width: 150,
           renderCell: (params) => (
             <Button onClick={() => handleButtonClick(params.row)}>View Image</Button>
-          ),}
+          ),},
+          {
+            field: 'actions_1',
+            headerName: 'Project Image',
+            width: 150,
+            renderCell: (params) => (
+              <Button onClick={() => handleProjectImages(params.row)}>View all images</Button>
+            ),}
         // { field: 'project_images', headerName: 'Project Image', width: 150 },
       ];
        
   const [openDialog, setOpenDialog] = useState(false);
+  const [imagesDialog, setImagesDialog] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+  const [images, setImages] = useState([]);
   const columnVisibilityModel = React.useMemo(() => {
    return{
     receipt_image: false,
+    images: false,
    }
   }, []);
   const handleCloseDialog = () => {
     setOpenDialog(false); // Close the dialog
+    setImagesDialog(false);
   };
       const [rows, setRows] = useState([])
       const fetchDailyWorkData = async () => {
@@ -106,6 +123,29 @@ const WorkList = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      
+    <Dialog style={{width: '100%', height: '100%'}} open={imagesDialog} onClose={handleCloseDialog}>
+      <div style={{padding: '30px'}}>
+      <Grid container spacing={2}>
+        { images.length !== 0 ? (
+        images.map((image, index) => (  
+          <Grid item xs={4} key={index}>
+            <img 
+            src={""+process.env.REACT_APP_API_URL+"/" + image} 
+            alt={`Image ${index}`} 
+            style={{ width: '100%', border: '1px solid #ccc', height: '20rem' }} 
+            />
+
+          </Grid>
+        ))) :
+        <Grid item xs={12}>
+        <h2>No images attached.</h2>
+      </Grid>
+        
+      }
+      </Grid>
+      </div>
+    </Dialog>
     </DashboardLayout>
   )
 }

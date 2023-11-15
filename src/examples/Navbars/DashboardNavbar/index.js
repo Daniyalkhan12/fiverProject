@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.2.0
@@ -52,6 +53,7 @@ import {
   setMiniSidenav,
   setOpenConfigurator,
 } from "context";
+import { Button } from "@mui/material";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -86,6 +88,39 @@ function DashboardNavbar({ absolute, light, isMini }) {
     return () => window.removeEventListener("scroll", handleTransparentNavbar);
   }, [dispatch, fixedNavbar]);
 
+  const logoutUser = async () => {
+    try {
+      const refreshToken = localStorage.getItem('refreshToken');
+  
+      // Prepare the request body as a JSON string
+      const requestBody = JSON.stringify({ refresh: refreshToken });
+  
+      const response = await fetch(''+process.env.REACT_APP_API_URL+'/user/logout/', {
+        method: 'POST',
+        body: requestBody, // Use the JSON string as the request body
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const json = await response.json();
+      console.log(json)
+      if (json.code === 400) {
+        alert("Error Logging out, Please try again!");
+      }
+  
+      if (json.code === 200) {
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('username');
+        alert("User Logged out Successfully!");
+        // navigate('/');
+        window.location.href = '/authentication/sign-in';
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
@@ -176,6 +211,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               >
                 <Icon sx={iconsStyle}>notifications</Icon>
               </IconButton>
+              <Button onClick={logoutUser}>Logout</Button>
               {renderMenu()}
             </MDBox>
           </MDBox>
